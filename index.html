@@ -261,8 +261,10 @@
                 <p>If you would like to surprise me with a gift, here are some suggestions that always make me smile:</p>
                 <div class="gifts-grid">
                     <div class="gift-item">
-                        <h3><a href="https://throne.com/paolarosa" target="_blank">https://throne.com/paolarosa</a></h3>
-                        <h3><a href="https://www.amazon.ca/hz/wishlist/ls/2B7KT9A8CYT6K" target="_blank">https://www.amazon.ca/hz/wishlist/ls/2B7KT9A8CYT6K</a></h3>
+                        <h3><a href="https://throne.com/paolarosa" target="_blank"><img src="img/trhone_logo.png" alt=""></a></h3>
+                    </div>
+                    <div class="gift-item">
+                        <h3><a href="https://www.amazon.ca/hz/wishlist/ls/2B7KT9A8CYT6K" target="_blank"><img src="img/Amazon_Logo.webp" alt=""></a></h3>
                     </div>
                 </div>
             </div>
@@ -306,22 +308,58 @@
                     <div class="booking-form">
                         <h3>Contact Form</h3>
                         <form>
-                            <input type="text" placeholder="Your age" required>
+                            <fieldset>
+                                <input type="text" placeholder="Your name" required>
+                                <input type="text" placeholder="Your alias" required>
+                                <input type="text" placeholder="Your age" required>
+                             </fieldset>
+                            <input type="tel" placeholder="Your Phone">
                             <input type="text" placeholder="Your current location (city)" required>
                             <input type="text" placeholder="Whether you prefer an incall or outcall appointment" required>
-                            <input type="text" placeholder="Your preferred appointment date" required>
-                            <input type="text" placeholder="Your preferred time" required>
-                            <input type="text" placeholder="The duration of the appointment" required>
-                            <!-- <input type="email" placeholder="Your Email" required>
-                            <input type="tel" placeholder="Your Phone">
+                            <fieldset >
+                                <div><label for="diaa">Date:</label>
+                                <input type="date" id="diaa" name="diaa" required/></div>
+
+                                <div><label for="time">Time:</label>
+                                <input type="time" id="startTime" required/></div>
+
+                                <div><label for="time">Duration:</label>
+                                <select id="duration" required>
+                                        <option id="duration" style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);">Select your experience</option>
+                                        <optgroup style="color: black; text-align: left;" label="SOCIAL">
+                                            <option style="text-align: center;">Social 1h</option>
+                                            <option style="text-align: center;">Social 1.5h</option>
+                                            <option style="text-align: center;">Social 2h</option>
+                                            <option style="text-align: center;">Social 3h</option>
+                                        </optgroup>
+                                        <optgroup style="color: black; text-align: left;" label="CALGARY">
+                                            <option style="text-align: center;">Calgary 1h</option>
+                                            <option style="text-align: center;">Calgary 1.5h</option>
+                                            <option style="text-align: center;">Calgary 2h</option>
+                                            <option style="text-align: center;">Calgary 3h</option>
+                                        </optgroup>
+                                        <optgroup style="color: black; text-align: left;" label="EDMONTON">
+                                            <option style="text-align: center;">Edmonton 1h</option>
+                                            <option style="text-align: center;">Edmonton 1.5h</option>
+                                            <option style="text-align: center;">Edmonton 2h</option>
+                                            <option style="text-align: center;">Edmonton 3h</option>
+                                        </optgroup>
+                                    </select></div>
+                            </fieldset>
                             <select required>
-                                <option value="">Type of Meeting</option>
-                                <option value="social">Social Companionship</option>
-                                <option value="intimate">Intimate Experience</option>
-                                <option value="travel">Travel</option>
-                                <option value="other">Other</option>
+                                <option style="color: rgb(255, 255, 255); background-color: rgb(0, 0, 0);">How did you find me?</option>
+                                <option value="X">X</option>
+                                <option value="CAF">CAF</option>
+                                <option value="TERB">TERB</option>
+                                <option value="MERB">MERB</option>
+                                <option value="MERB">TER</option>
+                                <option value="MERB">LL</option>
+                                <option value="MERB">Word of Mouth</option>
+                                <option value="MERB">Instagram</option>
+                                <option value="MERB">OF</option>
+                                <option value="MERB">Other</option>
                             </select>
-                            <textarea placeholder="Message (briefly describe what you have in mind)" rows="4" required></textarea> -->
+                            <textarea placeholder="Message" rows="4" required></textarea>
                             <button type="submit">Send Request</button>
                         </form>
                     </div>
