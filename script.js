@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar componentes
     initDisclaimer();
     initNavigation();
+    initGallery();
     initSlider();
     initScrollEffects();
     initForm();
@@ -47,44 +48,63 @@ function initNavigation() {
     const closeMenu = document.getElementById('close-menu');
     const navLinks = document.querySelectorAll('.nav-menu a');
 
-    // Toggle do menu
-    menuToggle.addEventListener('click', function() {
-        navMenu.classList.add('active');
-        menuToggle.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    });
+    // Toggle do menu (apenas mobile)
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            navMenu.classList.add('active');
+            menuToggle.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    }
 
     // Fechar menu com botão X
-    closeMenu.addEventListener('click', function() {
-        navMenu.classList.remove('active');
-        menuToggle.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    });
-
-    // Fechar menu ao clicar em um link
-    navLinks.forEach(link => {
-        link.addEventListener('click', function() {
+    if (closeMenu) {
+        closeMenu.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
+            if (menuToggle) {
+                menuToggle.classList.remove('active');
+            }
             document.body.style.overflow = 'auto';
         });
-    });
+    }
 
-    // Fechar menu ao clicar fora dele
-    navMenu.addEventListener('click', function(e) {
-        if (e.target === navMenu) {
-            navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-    });
+    // Fechar menu ao clicar fora dele (apenas mobile)
+    if (navMenu) {
+        navMenu.addEventListener('click', function(e) {
+            if (e.target === navMenu) {
+                navMenu.classList.remove('active');
+                if (menuToggle) {
+                    menuToggle.classList.remove('active');
+                }
+                document.body.style.overflow = 'auto';
+            }
+        });
+    }
 
-    // Smooth scroll para links internos
+    // Navegação ao clicar em um link
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             const href = this.getAttribute('href');
-            if (href.startsWith('#')) {
+            
+            // Se for um link interno (começa com #)
+            if (href && href.startsWith('#')) {
                 e.preventDefault();
+                e.stopPropagation();
+                
+                // Fechar menu mobile se estiver aberto
+                if (navMenu && navMenu.classList.contains('active')) {
+                    navMenu.classList.remove('active');
+                    if (menuToggle) {
+                        menuToggle.classList.remove('active');
+                    }
+                    document.body.style.overflow = 'auto';
+                }
+                
+                // Fazer scroll suave para a seção
                 const target = document.querySelector(href);
                 if (target) {
                     const headerHeight = document.querySelector('.header').offsetHeight;
@@ -101,11 +121,73 @@ function initNavigation() {
 
     // Fechar menu com tecla ESC
     document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+        if (e.key === 'Escape' && navMenu && navMenu.classList.contains('active')) {
             navMenu.classList.remove('active');
-            menuToggle.classList.remove('active');
+            if (menuToggle) {
+                menuToggle.classList.remove('active');
+            }
             document.body.style.overflow = 'auto';
         }
+    });
+}
+
+// Galeria - Modal de imagem
+function initGallery() {
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    
+    galleryItems.forEach(img => {
+        img.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Criar modal para visualizar imagem em tamanho maior
+            const modal = document.createElement('div');
+            modal.className = 'image-modal';
+            modal.innerHTML = `
+                <div class="image-modal-content">
+                    <button class="close-modal" aria-label="Fechar imagem">&times;</button>
+                    <img src="${this.src}" alt="${this.alt}">
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Função para fechar o modal
+            function closeModal() {
+                modal.style.opacity = '0';
+                modal.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    if (modal.parentNode) {
+                        document.body.removeChild(modal);
+                    }
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+            
+            // Fechar ao clicar no botão X
+            const closeBtn = modal.querySelector('.close-modal');
+            closeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal();
+            });
+            
+            // Fechar ao clicar fora da imagem
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Fechar ao pressionar ESC
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
+        });
     });
 }
 
@@ -246,39 +328,6 @@ function initForm() {
     }
 }
 
-// Galeria - Modal de imagem (opcional)
-function initGallery() {
-    const galleryItems = document.querySelectorAll('.gallery-item img');
-    
-    galleryItems.forEach(img => {
-        img.addEventListener('click', function() {
-            // Criar modal para visualizar imagem em tamanho maior
-            const modal = document.createElement('div');
-            modal.className = 'image-modal';
-            modal.innerHTML = `
-                <div class="image-modal-content">
-                    <span class="close-modal">&times;</span>
-                    <img src="${this.src}" alt="${this.alt}">
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-            
-            // Fechar modal
-            const closeBtn = modal.querySelector('.close-modal');
-            closeBtn.addEventListener('click', () => {
-                document.body.removeChild(modal);
-            });
-            
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    document.body.removeChild(modal);
-                }
-            });
-        });
-    });
-}
-
 // Utilitários
 function debounce(func, wait) {
     let timeout;
@@ -328,7 +377,7 @@ document.addEventListener('keydown', function(e) {
     const navMenu = document.getElementById('nav-menu');
     
     // Não interferir com navegação se menu estiver aberto
-    if (navMenu.classList.contains('active')) return;
+    if (navMenu && navMenu.classList.contains('active')) return;
     
     if (e.key === 'ArrowLeft') {
         changeSlide(-1);
@@ -357,12 +406,4 @@ function isMobile() {
 // Ajustar comportamento baseado no dispositivo
 window.addEventListener('resize', debounce(() => {
     // Reajustar elementos se necessário
-    // Esta função pode ser expandida para recarregar ou re-inicializar o slider
-    // se a mudança de tamanho cruzar o breakpoint de 480px.
 }, 250));
-
-// Inicializar galeria quando DOM estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    initGallery();
-});
-
